@@ -97,7 +97,7 @@ const mapStateToProps = state => ({
   weeklyreport: state.weeklyreport
 });
 
-WeeklyReport.PropTypes = {
+WeeklyReport.propTypes = {
   getCurrentEbook: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   ebook: PropTypes.object.isRequired,

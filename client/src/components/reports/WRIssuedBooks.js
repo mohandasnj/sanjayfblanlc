@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-//import { startOfWeek, lastDayOfWeek } from "date-fns";
-import { format } from "date-fns";
+import { format, startOfWeek, lastDayOfWeek } from "date-fns";
 
 class IssuedBooks extends Component {
   render() {
