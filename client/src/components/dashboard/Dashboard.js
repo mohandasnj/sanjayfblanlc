@@ -166,7 +166,7 @@ const mapStateToProps = state => ({
   allstudents: state.allstudents
 });
 
-Dashboard.PropTypes = {
+Dashboard.propTypes = {
   getCurrentEbook: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   ebook: PropTypes.object.isRequired,
