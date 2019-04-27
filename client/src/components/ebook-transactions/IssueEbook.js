@@ -28,9 +28,14 @@ class IssueEbook extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
-    this.props.getCurrentEbook();
-    this.props.getUnassignedEbooks();
-    this.props.getAllStudents();
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.auth.user.role === "student") {
+        this.props.history.push("/dashboardstudent");
+      }
+      this.props.getCurrentEbook();
+      this.props.getUnassignedEbooks();
+      this.props.getAllStudents();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -109,7 +114,7 @@ class IssueEbook extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <Link to="/dashboard" className="btn btn-light">
+              <Link to="/dashboard" className="btn btn-secondary">
                 Go Back
               </Link>
               <h1 className="display-4 text-center">Issue eBook</h1>
@@ -159,6 +164,7 @@ class IssueEbook extends Component {
 }
 
 IssueEbook.propTypes = {
+  auth: PropTypes.object.isRequired,
   issueEbook: PropTypes.func.isRequired,
   trackebook: PropTypes.object.isRequired,
   getCurrentEbook: PropTypes.func.isRequired,
@@ -171,6 +177,7 @@ IssueEbook.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   trackebook: state.trackebook,
   ebook: state.ebook,
   ebookunassigned: state.ebookunassigned,

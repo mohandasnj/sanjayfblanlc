@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
+import SelectListGroup from "../common/SelectListGroup";
 
 class Register extends Component {
   constructor() {
@@ -13,6 +14,8 @@ class Register extends Component {
       email: "",
       password: "",
       password2: "",
+      role: "",
+      bookname: "Barron's AP Statistics",
       errors: {}
     };
 
@@ -21,7 +24,11 @@ class Register extends Component {
   }
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      if (this.props.auth.user.role === "teacher") {
+        this.props.history.push("/dashboard");
+      } else if (this.props.auth.user.role === "student") {
+        this.props.history.push("/dashboardstudent");
+      }
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -41,7 +48,9 @@ class Register extends Component {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
-      password2: this.state.password2
+      password2: this.state.password2,
+      role: this.state.role,
+      bookname: this.state.bookname
     };
 
     this.props.registerUser(newUser, this.props.history);
@@ -49,6 +58,19 @@ class Register extends Component {
 
   render() {
     const { errors } = this.state;
+
+    // Select options for role
+    const options = [
+      { label: "* Select the role", value: 0 },
+      {
+        label: "Student",
+        value: "student"
+      },
+      {
+        label: "Teacher",
+        value: "teacher"
+      }
+    ];
 
     return (
       <div className="register">
@@ -74,6 +96,15 @@ class Register extends Component {
                   onChange={this.onChange}
                   error={errors.email}
                   info="This site uses Gravatar so if you want a profile image, use a Gravatar email"
+                />
+                <SelectListGroup
+                  placeholder="* Role"
+                  name="role"
+                  value={this.state.role}
+                  options={options}
+                  onChange={this.onChange}
+                  error={errors.role}
+                  info="Select Role"
                 />
                 <TextFieldGroup
                   placeholder="* Password"

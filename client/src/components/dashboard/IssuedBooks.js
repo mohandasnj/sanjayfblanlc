@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { deleteIssuedBook } from "../../actions/ebookActions";
+import { Link, withRouter } from "react-router-dom";
 import { format } from "date-fns";
 
 class IssuedBooks extends Component {
@@ -9,6 +10,15 @@ class IssuedBooks extends Component {
     this.props.deleteIssuedBook(id);
   }
 
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.auth.user.role === "teacher") {
+        this.props.history.push("/dashboard");
+      } else if (this.props.auth.user.role === "student") {
+        this.props.history.push("/dashboardstudent");
+      }
+    }
+  }
   render() {
     const ebookassigned = this.props.ebookassigned.ebookassigned;
 
@@ -55,11 +65,13 @@ class IssuedBooks extends Component {
 }
 
 IssuedBooks.propTypes = {
+  auth: PropTypes.object.isRequired,
   ebookassigned: PropTypes.object.isRequired,
   deleteIssuedBook: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   ebookassigned: state.ebookassigned
 });
 
@@ -68,4 +80,4 @@ export default connect(
   {
     deleteIssuedBook
   }
-)(IssuedBooks);
+)(withRouter(IssuedBooks));

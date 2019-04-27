@@ -7,6 +7,7 @@ import trackcodeReducer from "./trackcodeReducer";
 import allstudentsReducer from "./allstudentsReducer";
 import studentReducer from "./studentReducer";
 import weeklyreportReducer from "./weeklyreportReducer";
+import currentuserstudentReducer from "./authStudentReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
   ebookunassigned: trackcodeReducer,
   allstudents: allstudentsReducer,
   student: studentReducer,
-  weeklyreport: weeklyreportReducer
+  weeklyreport: weeklyreportReducer,
+  currentuserstudent: currentuserstudentReducer
 });

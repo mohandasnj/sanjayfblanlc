@@ -23,7 +23,13 @@ class EditStudent extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
-
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.auth.user.role === "student") {
+        this.props.history.push("/dashboardstudent");
+      }
+    }
+  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
@@ -110,7 +116,7 @@ class EditStudent extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <Link to="/dashboard" className="btn btn-light">
+              <Link to="/dashboard" className="btn btn-secondary">
                 Go Back
               </Link>
               <h1 className="display-4 text-center">Edit Student</h1>
@@ -179,6 +185,7 @@ class EditStudent extends Component {
 }
 
 EditStudent.propTypes = {
+  auth: PropTypes.object.isRequired,
   editStudent: PropTypes.func.isRequired,
   getStudentByStudentID: PropTypes.func.isRequired,
   student: PropTypes.object.isRequired,
@@ -186,6 +193,7 @@ EditStudent.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   student: state.student,
   errors: state.errors
 });

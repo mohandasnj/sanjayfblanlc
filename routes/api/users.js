@@ -42,11 +42,13 @@ router.post("/register", (req, res) => {
 
       const newUser = new User({
         name: req.body.name,
-        email: req.body.email,
+        email: req.body.email.toLowerCase(),
         avatar,
-        password: req.body.password
+        password: req.body.password,
+        role: req.body.role,
+        bookname: req.body.bookname
       });
-
+      //console.log("Book Name = " + newUser.bookname);
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) throw err;
@@ -72,7 +74,7 @@ router.post("/login", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  const email = req.body.email;
+  const email = req.body.email.toLowerCase();
   const password = req.body.password;
 
   // Find user by email
@@ -88,7 +90,12 @@ router.post("/login", (req, res) => {
       if (isMatch) {
         // User Matched
 
-        const payload = { id: user.id, name: user.name, avatar: user.avatar }; // Create JWT Payload
+        const payload = {
+          id: user.id,
+          name: user.name,
+          avatar: user.avatar,
+          role: user.role
+        }; // Create JWT Payload
 
         // Sign Token
         jwt.sign(
@@ -120,8 +127,33 @@ router.get(
     res.json({
       id: req.user.id,
       name: req.user.name,
-      email: req.user.email
+      email: req.user.email,
+      role: req.user.role
     });
+  }
+);
+
+/// @route  GET api/user/ebooks
+// @desc    Get ebook
+// @access  Private
+router.get(
+  "/ebooks",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const errors = {};
+    //console.log("Inside get");
+    //console.log(req.user.id);
+    User.find({
+      _id: req.user.id
+    })
+      .then(ebooks => {
+        if (!ebooks) {
+          errors.noebooks = "There are no ebooks";
+          return res.status(404).json(errors);
+        }
+        res.json(ebooks);
+      })
+      .catch(err => res.status(404).json({ ebook: "There are no ebooks" }));
   }
 );
 

@@ -24,7 +24,7 @@ class TrackStudent extends Component {
           <td>
             <Link
               to={`/inter-edit-student/${alls.studentid}`}
-              className="btn btn-light mr-3"
+              className="btn btn-secondary mr-1"
             >
               <i className="fa fa-edit text-info  mr-1" /> Edit
             </Link>

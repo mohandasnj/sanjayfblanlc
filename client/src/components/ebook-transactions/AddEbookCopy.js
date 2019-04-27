@@ -23,8 +23,12 @@ class AddEbookCopy extends Component {
   }
 
   componentDidMount() {
-    //console.log("Inside moount");
-    this.props.getCurrentEbook();
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.auth.user.role === "student") {
+        this.props.history.push("/dashboardstudent");
+      }
+      this.props.getCurrentEbook();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -83,7 +87,7 @@ class AddEbookCopy extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <Link to="/dashboard" className="btn btn-light">
+              <Link to="/dashboard" className="btn btn-secondary">
                 Go Back
               </Link>
               <h1 className="display-4 text-center">Track Redemption Code</h1>
@@ -123,6 +127,7 @@ class AddEbookCopy extends Component {
 }
 
 AddEbookCopy.propTypes = {
+  auth: PropTypes.object.isRequired,
   addEbookCopy: PropTypes.func.isRequired,
   trackebook: PropTypes.object.isRequired,
   getCurrentEbook: PropTypes.func.isRequired,
@@ -131,6 +136,7 @@ AddEbookCopy.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   trackebook: state.trackebook,
   ebook: state.ebook,
   errors: state.errors

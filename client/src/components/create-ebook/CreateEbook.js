@@ -6,7 +6,8 @@ import { Link, withRouter } from "react-router-dom";
 //import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 //import InputGroup from "../common/InputGroup";
 import SelectListGroup from "../common/SelectListGroup";
-import { createEbook } from "../../actions/ebookActions";
+import { createEbook, getCurrentEbook } from "../../actions/ebookActions";
+import isEmpty from "../../validation/is-empty";
 
 class CreateEbook extends Component {
   constructor(props) {
@@ -23,9 +24,39 @@ class CreateEbook extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.auth.user.role === "teacher") {
+        this.props.history.push("/dashboard");
+      } else if (this.props.auth.user.role === "student") {
+        this.props.history.push("/dashboardstudent");
+      }
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
+    }
+
+    if (nextProps.ebook.ebook) {
+      const ebook = nextProps.ebook.ebook[0];
+      console.log("Inside receiveprops");
+      //console.log(nextProps.ebook.bookname);
+      ebook.bookname = !isEmpty(ebook.bookname) ? ebook.bookname : "";
+      ebook.author = !isEmpty(ebook.author) ? ebook.author : "";
+      ebook.datepublished = !isEmpty(ebook.datepublished)
+        ? ebook.datepublished
+        : "";
+      ebook.isbn13 = !isEmpty(ebook.isbn13) ? ebook.isbn13 : "";
+      //console.log(nextProps.ebook.ebook[0].bookname);
+      // Set component fields state
+      this.setState({
+        bookname: ebook.bookname,
+        author: ebook.author,
+        datepublished: ebook.datepublished,
+        isbn13: ebook.isbn13
+      });
     }
   }
   onSubmit(e) {
@@ -43,6 +74,9 @@ class CreateEbook extends Component {
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+    //this.loadModuleFromServer(e.target.value);
+    //this.props.getCurrentEbook();
+    //console.log("Inside Onchange");
   }
 
   render() {
@@ -74,7 +108,7 @@ class CreateEbook extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <Link to="/dashboard" className="btn btn-light">
+              <Link to="/dashboard" className="btn btn-secondary">
                 Go Back
               </Link>
               <h1 className="display-4 text-center">Create your ebook</h1>
@@ -128,15 +162,19 @@ class CreateEbook extends Component {
 }
 
 CreateEbook.propTypes = {
+  createEbook: PropTypes.func.isRequired,
+  getCurrentEbook: PropTypes.func.isRequired,
   ebook: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   ebook: state.ebook,
   errors: state.errors
 });
 export default connect(
   mapStateToProps,
-  { createEbook }
+  { createEbook, getCurrentEbook }
 )(withRouter(CreateEbook));

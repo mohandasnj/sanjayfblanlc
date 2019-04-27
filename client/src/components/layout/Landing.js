@@ -6,7 +6,11 @@ import { connect } from "react-redux";
 class Landing extends Component {
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      if (this.props.auth.user.role === "teacher") {
+        this.props.history.push("/dashboard");
+      } else if (this.props.auth.user.role === "student") {
+        this.props.history.push("/dashboardstudent");
+      }
     }
   }
   render() {
@@ -21,6 +25,12 @@ class Landing extends Component {
                   {" "}
                   Teachers sign up to track and issue books to their class of
                   students{" "}
+                </p>
+
+                <p className="lead">
+                  {" "}
+                  Students sign up to view the books assigned to them by their
+                  teacher{" "}
                 </p>
                 <hr />
                 <Link to="/register" className="btn btn-lg btn-info mr-2">

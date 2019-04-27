@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { format } from "date-fns";
 //import { startOfWeek, lastDayOfWeek } from "date-fns";
 
-class IssuedBooks extends Component {
+class StudentIssuedBooks extends Component {
   render() {
     const weeklyreport = this.props.weeklyreport.weeklyreport;
 
@@ -13,7 +13,7 @@ class IssuedBooks extends Component {
       weeklyreportItems = weeklyreport.map(writems => (
         <tr key={writems._id}>
           <td>{weeklyreport.indexOf(writems) + 1}</td>
-          <td>{writems.studentid}</td>
+          <td>{writems.bookname}</td>
           <td>{writems.redemptioncode}</td>
           <td>{format(writems.issueddate, "DD/MMM/YYYY hh:mm:ss A")}</td>
         </tr>
@@ -59,7 +59,7 @@ class IssuedBooks extends Component {
           <thead>
             <tr>
               <th>#</th>
-              <th>Student ID</th>
+              <th>Book Name</th>
               <th>Redemption Code</th>
               <th>Issued Date</th>
             </tr>
@@ -71,7 +71,7 @@ class IssuedBooks extends Component {
   }
 }
 
-IssuedBooks.propTypes = {
+StudentIssuedBooks.propTypes = {
   weeklyreport: PropTypes.object.isRequired
 };
 
@@ -82,4 +82,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {}
-)(IssuedBooks);
+)(StudentIssuedBooks);

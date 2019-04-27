@@ -9,9 +9,11 @@ import {
   clearCurrentUnassignedEbooks,
   clearCurrentStudents,
   clearCurrentStudent,
-  clearCurrentWeeklyReport
+  clearCurrentWeeklyReport,
+  clearCurrentUserStudent
 } from "../../actions/ebookActions";
 import logo from "./img/logo.png";
+import default_face from "./img/default_face.png";
 
 class Navbar extends Component {
   onLogoutClick(e) {
@@ -23,11 +25,12 @@ class Navbar extends Component {
     this.props.clearCurrentStudents();
     this.props.clearCurrentStudent();
     this.props.clearCurrentWeeklyReport();
+    this.props.clearCurrentUserStudent();
   }
   render() {
     const { isAuthenticated, user } = this.props.auth;
-
-    const authLinks = (
+    //console.log(user);
+    const authLinksTeacher = (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item mr-6">
           <a
@@ -37,7 +40,29 @@ class Navbar extends Component {
           >
             <img
               className="rounded-circle"
-              src={user.avatar}
+              src={default_face}
+              //{user.avatar}
+              alt={user.name}
+              style={{ width: "25px", marginRight: "5px" }}
+              title="You must have a Gravatar connected to your email to display an image"
+            />{" "}
+            Logout
+          </a>
+        </li>
+      </ul>
+    );
+
+    const authLinksStudents = (
+      <ul className="navbar-nav ml-auto">
+        <li className="nav-item mr-6">
+          <a
+            href="/"
+            onClick={this.onLogoutClick.bind(this)}
+            className="nav-link"
+          >
+            <img
+              className="rounded-circle"
+              src={default_face}
               alt={user.name}
               style={{ width: "25px", marginRight: "5px" }}
               title="You must have a Gravatar connected to your email to display an image"
@@ -93,7 +118,13 @@ class Navbar extends Component {
                 </Link>
               </li>
             </ul>
-            {isAuthenticated ? authLinks : guestLinks}
+            {isAuthenticated
+              ? user.role === "teacher"
+                ? authLinksTeacher
+                : user.role === "student"
+                ? authLinksStudents
+                : guestLinks
+              : guestLinks}
           </div>
         </div>
       </nav>
@@ -116,6 +147,7 @@ export default connect(
     clearCurrentUnassignedEbooks,
     clearCurrentStudents,
     clearCurrentStudent,
-    clearCurrentWeeklyReport
+    clearCurrentWeeklyReport,
+    clearCurrentUserStudent
   }
 )(Navbar);

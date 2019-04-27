@@ -17,15 +17,20 @@ import AboutUs from "./components/aboutus/AboutUs";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Dashboard from "./components/dashboard/Dashboard";
+import DashboardStudent from "./components/dashboardstudent/DashboardStudent";
 import CreateEbook from "./components/create-ebook/CreateEbook";
 import EditEbook from "./components/edit-ebook/EditEbook";
 import AddEbookCopy from "./components/ebook-transactions/AddEbookCopy";
 import IssueEbook from "./components/ebook-transactions/IssueEbook";
 import CreateStudent from "./components/student/CreateStudent";
 import EditStudent from "./components/student/EditStudent";
+import ViewEBook from "./components/view-ebook/ViewEbook";
+import InterViewEBook from "./components/view-ebook/InterViewEBook";
 import InterEditStudent from "./components/student/InterEditStudent";
 import WeeklyReport from "./components/reports/WeeklyReport";
 import WRIssuedBooks from "./components/reports/WRIssuedBooks";
+import StudentWeeklyReport from "./components/reports/StudentWeeklyReport";
+import SWRIssuedBooks from "./components/reports/SWRIssuedBooks";
 
 import "./App.css";
 
@@ -61,10 +66,15 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Route eaxct path="/aboutus" component={AboutUs} />
-              {/* <Route exact path="student/:studentid" component={EditStudent} /> */}
-              {/* <Route exact path="/edit-student" component={EditStudent} /> */}
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/dashboardStudent"
+                  component={DashboardStudent}
+                />
               </Switch>
               <Switch>
                 <PrivateRoute
@@ -114,6 +124,20 @@ class App extends Component {
               <Switch>
                 <PrivateRoute
                   exact
+                  path="/student-weekly-report"
+                  component={StudentWeeklyReport}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/student-issued-books"
+                  component={SWRIssuedBooks}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
                   // path="/edit-student/:studentid"
                   path="/inter-edit-student/:studentid"
                   component={InterEditStudent}
@@ -125,6 +149,22 @@ class App extends Component {
                   // path="/edit-student/:studentid"
                   path="/edit-student"
                   component={EditStudent}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  // path="/inter-view-ebook/:bookname"
+                  path="/inter-view-ebook/:bookname"
+                  component={InterViewEBook}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  // path="/view-ebook/:bookname"
+                  path="/view-ebook"
+                  component={ViewEBook}
                 />
               </Switch>
             </div>

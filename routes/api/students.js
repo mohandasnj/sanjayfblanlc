@@ -252,7 +252,7 @@ router.get(
   }
 );
 
-// @route   GET api/profile/handle/:handle
+// @route   GET api/students/studentid/:studentid
 // @desc    Get profile by handle
 // @access  Public
 
@@ -270,6 +270,53 @@ router.get("/studentid/:studentid", (req, res) => {
     })
     .catch(err => res.status(404).json(err));
 });
+
+// @route   GET api/students/currentuserstudent
+// @desc    Get profile by handle
+// @access  Public
+
+router.get(
+  "/currentuserstudent",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const errors = {};
+    //console.log(req.user.id);
+    User.findOne({ _id: req.user.id })
+      .then(studentuser => {
+        if (!studentuser) {
+          errors.nostudent = "There are no student user >>";
+          return res.status(404).json(errors);
+        }
+        //console.log(studentuser.email);
+        Student.findOne({
+          email: studentuser.email
+        }).then(student => {
+          if (!student) {
+            errors.nostudents = "There are no students >>>";
+            return res.status(404).json(errors);
+          }
+          User.find({
+            _id: student.teacherid
+          })
+            .then(user => {
+              if (!user) {
+                errors.noteacher = "There are no teacher";
+                return res.status(404).json(errors);
+              }
+              res.json(user);
+            })
+            .catch(
+              err => (errors.user = "There are no teacher for this student")
+            );
+        });
+      })
+      .catch(err =>
+        res
+          .status(404)
+          .json({ user: "There are no teacher associated with student" })
+      );
+  }
+);
 
 // @route  DELETE api/students/studentid/:id
 // @desc   delete a student by id

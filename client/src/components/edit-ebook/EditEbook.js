@@ -3,13 +3,15 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../common/TextFieldGroup";
 import { Link, withRouter } from "react-router-dom";
-//import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
-//import InputGroup from "../common/InputGroup";
 import SelectListGroup from "../common/SelectListGroup";
-import { createEbook, getCurrentEbook } from "../../actions/ebookActions";
+import {
+  createEbook,
+  getCurrentEbook,
+  getEbookByName
+} from "../../actions/ebookActions";
 import isEmpty from "../../validation/is-empty";
 
-class CreateEbook extends Component {
+class EditEbook extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,8 +27,12 @@ class CreateEbook extends Component {
   }
 
   componentDidMount() {
-    //console.log("Inside moount");
-    this.props.getCurrentEbook();
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.auth.user.role === "student") {
+        this.props.history.push("/dashboardstudent");
+      }
+      this.props.getCurrentEbook();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,14 +45,14 @@ class CreateEbook extends Component {
     if (nextProps.ebook.ebook) {
       const ebook = nextProps.ebook.ebook[0];
       //console.log("Inside receiveprops");
-      //console.log(nextProps.ebook.bookname);
+      //console.log(ebook);
       ebook.bookname = !isEmpty(ebook.bookname) ? ebook.bookname : "";
       ebook.author = !isEmpty(ebook.author) ? ebook.author : "";
       ebook.datepublished = !isEmpty(ebook.datepublished)
         ? ebook.datepublished
         : "";
       ebook.isbn13 = !isEmpty(ebook.isbn13) ? ebook.isbn13 : "";
-      //console.log(nextProps.ebook.ebook[0].bookname);
+      //console.log(ebook.datepublished);
       // Set component fields state
       this.setState({
         bookname: ebook.bookname,
@@ -71,6 +77,12 @@ class CreateEbook extends Component {
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+    if (e.target.name === "bookname") {
+      this.props.getEbookByName(e.target.value);
+      this.setState({
+        bookname: e.target.value
+      });
+    }
   }
 
   render() {
@@ -102,7 +114,7 @@ class CreateEbook extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <Link to="/dashboard" className="btn btn-light">
+              <Link to="/dashboard" className="btn btn-secondary">
                 Go Back
               </Link>
               <h1 className="display-4 text-center">Edit ebook</h1>
@@ -152,18 +164,21 @@ class CreateEbook extends Component {
   }
 }
 
-CreateEbook.propTypes = {
+EditEbook.propTypes = {
+  auth: PropTypes.object.isRequired,
   createEbook: PropTypes.func.isRequired,
   getCurrentEbook: PropTypes.func.isRequired,
+  getEbookByName: PropTypes.func.isRequired,
   ebook: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   ebook: state.ebook,
   errors: state.errors
 });
 export default connect(
   mapStateToProps,
-  { createEbook, getCurrentEbook }
-)(withRouter(CreateEbook));
+  { createEbook, getCurrentEbook, getEbookByName }
+)(withRouter(EditEbook));

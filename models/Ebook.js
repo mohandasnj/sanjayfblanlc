@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const EbookSchema = new Schema({
-  teacherid: {
-    type: Schema.Types.ObjectId,
-    ref: "users"
-  },
+  // teacherid: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "users"
+  // },
   bookname: {
     type: String,
     required: true

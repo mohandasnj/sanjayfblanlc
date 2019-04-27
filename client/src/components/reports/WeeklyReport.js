@@ -8,8 +8,14 @@ import WRIssuedBooks from "./WRIssuedBooks";
 
 class WeeklyReport extends Component {
   componentDidMount() {
-    this.props.getCurrentEbook();
-    this.props.getWeeklyReport();
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.auth.user.role === "student") {
+        this.props.history.push("/dashboardstudent");
+      }
+
+      this.props.getCurrentEbook();
+      this.props.getWeeklyReport();
+    }
   }
 
   render() {
@@ -76,7 +82,7 @@ class WeeklyReport extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <Link to="/dashboard" className="btn btn-light">
+              <Link to="/dashboard" className="btn btn-secondary">
                 Go Back
               </Link>
               <h1 className="display-10 text-center">Weekly Report</h1>

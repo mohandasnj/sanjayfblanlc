@@ -18,7 +18,10 @@ import {
   STUDENTS_LOADING,
   GET_WEEKLY_REPORT,
   WEEKLY_REPORT_LOADING,
-  CLEAR_WEEKLY_REPORT
+  CLEAR_WEEKLY_REPORT,
+  CURRENT_USER_STUDENT_LOADING,
+  CURRENT_USER_STUDENT,
+  CLEAR_CURRENT_USER_STUDENT
 } from "./types";
 
 // Get current ebook
@@ -27,6 +30,26 @@ export const getCurrentEbook = () => dispatch => {
   dispatch(clearErrors());
   axios
     .get("/api/ebooks")
+    .then(res =>
+      dispatch({
+        type: GET_EBOOK,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_EBOOK,
+        payload: {}
+      })
+    );
+};
+
+// Get ebook by name
+export const getEbookByName = book_name => dispatch => {
+  dispatch(setEbookLoading());
+  dispatch(clearErrors());
+  axios
+    .get(`/api/ebooks/${book_name}`)
     .then(res =>
       dispatch({
         type: GET_EBOOK,
@@ -117,6 +140,44 @@ export const getWeeklyReport = () => dispatch => {
     );
 };
 
+// Student Weekly Report - Get assigned ebooks
+export const getStudentWeeklyReport = () => dispatch => {
+  dispatch(setWeeklyReportLoading());
+  axios
+    .get("/api/trackbooks/studentweeklyreport")
+    .then(res =>
+      dispatch({
+        type: GET_WEEKLY_REPORT,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_WEEKLY_REPORT,
+        payload: {}
+      })
+    );
+};
+
+// Get student assigned ebooks
+export const getStudentAssignedEbooks = () => dispatch => {
+  dispatch(setAssignedEbookLoading());
+  axios
+    .get("/api/trackbooks/studentassignedbooks")
+    .then(res =>
+      dispatch({
+        type: GET_ASSIGNED_EBOOKS,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ASSIGNED_EBOOKS,
+        payload: {}
+      })
+    );
+};
+
 //GET ALL STUDENTS
 export const getAllStudents = () => dispatch => {
   dispatch(setAllStudentsLoading());
@@ -151,6 +212,25 @@ export const getStudentByStudentID = studentid => dispatch => {
       dispatch({
         type: GET_STUDENT,
         payload: null
+      })
+    );
+};
+
+//Get Current User Student
+export const getCurrentUserStudent = () => dispatch => {
+  dispatch(setCurrentUserStudentLoading());
+  axios
+    .get("/api/students/currentuserstudent")
+    .then(res =>
+      dispatch({
+        type: CURRENT_USER_STUDENT,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: CURRENT_USER_STUDENT,
+        payload: {}
       })
     );
 };
@@ -226,6 +306,13 @@ export const setAllStudentsLoading = () => {
   };
 };
 
+// CURRENT_STUDENT_TEACHER_LOADING
+export const setCurrentUserStudentLoading = () => {
+  return {
+    type: CURRENT_USER_STUDENT_LOADING
+  };
+};
+
 // Add Ebook Copy
 export const addEbookCopy = (unassignedEbookData, history) => dispatch => {
   axios
@@ -256,6 +343,13 @@ export const issueEbook = (assignedEbookData, history) => dispatch => {
 export const clearCurrentEbook = () => {
   return {
     type: CLEAR_CURRENT_EBOOK
+  };
+};
+
+// CLEAR_CURRENT_USER_STUDENT = "CURRENT_USER_STUDENT"
+export const clearCurrentUserStudent = () => {
+  return {
+    type: CLEAR_CURRENT_USER_STUDENT
   };
 };
 
@@ -327,8 +421,6 @@ export const deleteIssuedBook = id => dispatch => {
 // Delete Student
 export const deleteStudent = id => dispatch => {
   if (window.confirm("Are you sure? This can NOT be undone!")) {
-    //console.log(id);
-
     axios
       .delete(`/api/trackbooks/bystudentid/${id}`)
       .then(res => dispatch(getAssignedEbooks()))

@@ -71,44 +71,58 @@ router.get(
     const errors = {};
     const trackebookFields = {};
     //console.log(req.user.id);
-    Ebook.findOne({
-      teacherid: req.user.id
+    User.findOne({
+      _id: req.user.id
     })
-      .then(ebooks => {
-        if (!ebooks) {
-          errors.trackebook = "There are no ebooks";
+      .then(user => {
+        if (!user) {
+          errors.noebooks = "There are no ebooks";
+          return res.status(404).json(errors);
         }
-        //console.log(ebooks);
-        trackebookFields.bookname = ebooks.bookname;
-        //console.log("ebooks.bookname:" + ebooks.bookname);
 
-        //console.log(trackebookFields.bookname);
-        trackebookFields.teacherid = req.user.id;
-        // if (req.body.bookname) {
-        //   trackebookFields.bookname = req.body.bookname;
-        // } else {
-        //   trackebookFields.bookname = "Barron's AP Statistics";
-        // }
-        Trackbook.find({
-          $and: [
-            { bookname: trackebookFields.bookname },
-            { studentid: "" },
-            { teacherid: trackebookFields.teacherid }
-          ]
+        Ebook.findOne({
+          //teacherid: req.user.id
+          bookname: user.bookname
         })
-          .sort({ issueddate: 1 })
-          .then(trackebook => {
-            if (!trackebook) {
+          .then(ebooks => {
+            if (!ebooks) {
               errors.trackebook = "There are no ebooks";
-              return res.status(404).json(errors);
             }
-            res.json(trackebook);
-          });
-        // .catch(err =>
-        //   res.status(404).json({ trackebook: "There are no ebooks" })
-        // )
+            //console.log(ebooks);
+            trackebookFields.bookname = ebooks.bookname;
+            //console.log("ebooks.bookname:" + ebooks.bookname);
+
+            //console.log(trackebookFields.bookname);
+            trackebookFields.teacherid = req.user.id;
+            // if (req.body.bookname) {
+            //   trackebookFields.bookname = req.body.bookname;
+            // } else {
+            //   trackebookFields.bookname = "Barron's AP Statistics";
+            // }
+            Trackbook.find({
+              $and: [
+                { bookname: trackebookFields.bookname },
+                { studentid: "" },
+                { teacherid: trackebookFields.teacherid }
+              ]
+            })
+              .sort({ issueddate: 1 })
+              .then(trackebook => {
+                if (!trackebook) {
+                  errors.trackebook = "There are no ebooks";
+                  return res.status(404).json(errors);
+                }
+                res.json(trackebook);
+              });
+            // .catch(err =>
+            //   res.status(404).json({ trackebook: "There are no ebooks" })
+            // )
+          })
+          .catch(err => (errors.trackebook = "There are no ebooks"));
       })
-      .catch(err => (errors.trackebook = "There are no ebooks"));
+      .catch(err =>
+        res.status(404).json({ user: "There are no ebooks in the user record" })
+      );
   }
 );
 
@@ -122,7 +136,7 @@ router.get(
     const errors = {};
     const trackebookFields = {};
     Ebook.findOne({
-      teacherid: req.user.id,
+      //teacherid: req.user.id,
       bookname: req.params.book_name
     })
       .then(ebooks => {
@@ -161,33 +175,48 @@ router.get(
   (req, res) => {
     const errors = {};
     const trackebookFields = {};
-    Ebook.findOne({
-      teacherid: req.user.id
-    })
-      .then(ebooks => {
-        if (!ebooks) {
-          errors.trackebook = "There are no ebooks";
-        }
-        trackebookFields.bookname = ebooks.bookname;
-        trackebookFields.teacherid = req.user.id;
 
-        Trackbook.find({
-          $and: [
-            { bookname: trackebookFields.bookname },
-            { studentid: { $ne: "" } },
-            { teacherid: trackebookFields.teacherid }
-          ]
+    User.findOne({
+      _id: req.user.id
+    })
+      .then(user => {
+        if (!user) {
+          errors.noebooks = "There are no ebooks";
+          return res.status(404).json(errors);
+        }
+
+        Ebook.findOne({
+          //teacherid: req.user.id
+          bookname: user.bookname
         })
-          .sort({ studentid: 1 })
-          .then(trackebook => {
-            if (!trackebook) {
+          .then(ebooks => {
+            if (!ebooks) {
               errors.trackebook = "There are no ebooks";
-              return res.status(404).json(errors);
             }
-            res.json(trackebook);
-          });
+            trackebookFields.bookname = ebooks.bookname;
+            trackebookFields.teacherid = req.user.id;
+
+            Trackbook.find({
+              $and: [
+                { bookname: trackebookFields.bookname },
+                { studentid: { $ne: "" } },
+                { teacherid: trackebookFields.teacherid }
+              ]
+            })
+              .sort({ studentid: 1 })
+              .then(trackebook => {
+                if (!trackebook) {
+                  errors.trackebook = "There are no ebooks";
+                  return res.status(404).json(errors);
+                }
+                res.json(trackebook);
+              });
+          })
+          .catch(err => (errors.trackebook = "There are no ebooks"));
       })
-      .catch(err => (errors.trackebook = "There are no ebooks"));
+      .catch(err =>
+        res.status(404).json({ user: "There are no ebooks in the user record" })
+      );
   }
 );
 
@@ -200,39 +229,160 @@ router.get(
   (req, res) => {
     const errors = {};
     const trackebookFields = {};
-    Ebook.findOne({
-      teacherid: req.user.id
+
+    User.findOne({
+      _id: req.user.id
     })
-      .then(ebooks => {
-        if (!ebooks) {
-          errors.trackebook = "There are no ebooks";
+      .then(user => {
+        if (!user) {
+          errors.noebooks = "There are no ebooks";
+          return res.status(404).json(errors);
         }
-        trackebookFields.bookname = ebooks.bookname;
-        trackebookFields.teacherid = req.user.id;
 
-        var today = new Date();
-        var sevenDaysAgo = new Date(today);
-        sevenDaysAgo.setDate(today.getDate() - 7);
-        //console.log(sevenDaysAgo);
-
-        Trackbook.find({
-          $and: [
-            { bookname: trackebookFields.bookname },
-            { studentid: { $ne: "" } },
-            { teacherid: trackebookFields.teacherid },
-            { issueddate: { $gte: sevenDaysAgo } }
-          ]
+        Ebook.findOne({
+          //teacherid: req.user.id
+          bookname: user.bookname
         })
-          .sort({ studentid: 1 })
-          .then(trackebook => {
-            if (!trackebook) {
+          .then(ebooks => {
+            if (!ebooks) {
               errors.trackebook = "There are no ebooks";
-              return res.status(404).json(errors);
             }
-            res.json(trackebook);
-          });
+            trackebookFields.bookname = ebooks.bookname;
+            trackebookFields.teacherid = req.user.id;
+
+            var today = new Date();
+            var sevenDaysAgo = new Date(today);
+            sevenDaysAgo.setDate(today.getDate() - 7);
+            //console.log(sevenDaysAgo);
+
+            Trackbook.find({
+              $and: [
+                { bookname: trackebookFields.bookname },
+                { studentid: { $ne: "" } },
+                { teacherid: trackebookFields.teacherid },
+                { issueddate: { $gte: sevenDaysAgo } }
+              ]
+            })
+              .sort({ studentid: 1 })
+              .then(trackebook => {
+                if (!trackebook) {
+                  errors.trackebook = "There are no ebooks";
+                  return res.status(404).json(errors);
+                }
+                res.json(trackebook);
+              });
+          })
+          .catch(err => (errors.trackebook = "There are no ebooks"));
       })
-      .catch(err => (errors.trackebook = "There are no ebooks"));
+      .catch(err =>
+        res.status(404).json({ user: "There are no ebooks in the user record" })
+      );
+  }
+);
+
+// @route  GET api/trackbooks/studentweeklyreport
+// @desc    Get all issued books for last one week
+// @access  Private
+router.get(
+  "/studentweeklyreport",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const errors = {};
+    const trackebookFields = {};
+    //console.log(req.user.id);
+    User.findOne({
+      _id: req.user.id
+    })
+      .then(user => {
+        if (!user) {
+          errors.noebooks = "There are no ebooks";
+          return res.status(404).json(errors);
+        }
+        //console.log(user.email);
+        Student.findOne({
+          email: user.email
+        }).then(student => {
+          if (!student) {
+            errors.nostudents = "There are no students";
+            return res.status(404).json(errors);
+          }
+          trackebookFields.studentid = student.studentid;
+          //console.log(trackebookFields.studentid);
+
+          var today = new Date();
+          var sevenDaysAgo = new Date(today);
+          sevenDaysAgo.setDate(today.getDate() - 7);
+          //console.log(sevenDaysAgo);
+
+          Trackbook.find({
+            $and: [
+              { studentid: trackebookFields.studentid },
+              { issueddate: { $gte: sevenDaysAgo } }
+            ]
+          })
+            .sort({ issueddate: 1 })
+            .then(trackebook => {
+              if (!trackebook) {
+                errors.trackebook = "There are no ebooks";
+                return res.status(404).json(errors);
+              }
+              res.json(trackebook);
+            })
+            .catch(err => (errors.trackebook = "There are no ebooks"));
+        });
+      })
+      .catch(err =>
+        res.status(404).json({ user: "There are no ebooks in the user record" })
+      );
+  }
+);
+
+// @route  GET api/trackbooks/studentassignedbooks
+// @desc    Get all assigned books for a student
+// @access  Private
+router.get(
+  "/studentassignedbooks",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const errors = {};
+    const trackebookFields = {};
+    //console.log(req.user.id);
+    User.findOne({
+      _id: req.user.id
+    })
+      .then(user => {
+        if (!user) {
+          errors.noebooks = "There are no ebooks";
+          return res.status(404).json(errors);
+        }
+        //console.log(user.email);
+        Student.findOne({
+          email: user.email
+        }).then(student => {
+          if (!student) {
+            errors.nostudents = "There are no students";
+            return res.status(404).json(errors);
+          }
+          trackebookFields.studentid = student.studentid;
+          //console.log(trackebookFields.studentid);
+
+          Trackbook.find({
+            $and: [{ studentid: trackebookFields.studentid }]
+          })
+            .sort({ issueddate: 1 })
+            .then(trackebook => {
+              if (!trackebook) {
+                errors.trackebook = "There are no ebooks";
+                return res.status(404).json(errors);
+              }
+              res.json(trackebook);
+            })
+            .catch(err => (errors.trackebook = "There are no ebooks"));
+        });
+      })
+      .catch(err =>
+        res.status(404).json({ user: "There are no ebooks in the user record" })
+      );
   }
 );
 

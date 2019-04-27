@@ -16,6 +16,11 @@ import TrackStudent from "./TrackStudent";
 
 class Dashboard extends Component {
   componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.auth.user.role === "student") {
+        this.props.history.push("/dashboardstudent");
+      }
+    }
     this.props.getCurrentEbook();
     this.props.getAllStudents();
     this.props.getAssignedEbooks();
@@ -41,7 +46,6 @@ class Dashboard extends Component {
     } else {
       // Check if logged in user has ebook data
       if (Object.keys(ebook).length > 0) {
-        //if (Object.keys(ebookassigned).length > 0) {
         dashboardbookname = ebook[0].bookname;
 
         dashboardebookContent = (
@@ -50,7 +54,6 @@ class Dashboard extends Component {
             <EbookActions />
           </div>
         );
-        //}
       } else {
         // User is logged in but has no ebook
         dashboardebookContent = (
@@ -93,7 +96,6 @@ class Dashboard extends Component {
       dashboardSpinnerContent = <Spinner />;
     } else {
       if (Object.keys(ebookassigned).length > 0) {
-        //console.log("inside ebookassigned");
         dashboardebookassignedContent = (
           <div>
             <IssuedBooks ebookassigned={ebookassigned} />
@@ -118,13 +120,11 @@ class Dashboard extends Component {
     } else {
       // Check if logged in user has ebook data
       if (Object.keys(ebookunassigned).length > 0) {
-        //if (Object.keys(ebookassigned).length > 0) {
         dashboardebookunassignedContent = (
           <div>
             <TrackCode ebookunassigned={ebookunassigned} />
           </div>
         );
-        //}
       } else {
         // User is logged in but has no ebook
         dashboardebookunassignedContent = (
@@ -144,7 +144,9 @@ class Dashboard extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h1 className="display-4">{dashboardbookname}</h1>
+              <h3 className="mb-4 text-center">
+                Book Name: {dashboardbookname}
+              </h3>
               {dashboardebookContent}
               {dashboardallstudentsContent}
               {dashboardSpinnerContent}
@@ -173,7 +175,6 @@ Dashboard.propTypes = {
   getUnassignedEbooks: PropTypes.func.isRequired,
   getAssignedEbooks: PropTypes.func.isRequired,
   getAllStudents: PropTypes.func.isRequired,
-  //deleteAccount: PropTypes.func.isRequired,
   ebookunassigned: PropTypes.object.isRequired,
   ebookassigned: PropTypes.object.isRequired,
   allstudents: PropTypes.object.isRequired
