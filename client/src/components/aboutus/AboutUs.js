@@ -23,14 +23,16 @@ class AboutUs extends Component {
             <h1 className="text-center">Purpose/Description</h1>
             <p>
               The AP Statistics Book Tracker allows teachers to create an
-              account, and track and issue books to their class of students.
-              Five AP Statistics books have been chosen for the teacher to use.
-              The user can edit the book when they want to and then create
-              multiple copies of that book. The user can then develop student
-              accounts, and assign book copies to the students. Additionally,
-              the teacher can look at a weekly report of all the transactions
-              that have occurred. This website provides a simple and easy way
-              for teachers to give books to students.
+              account, track and issue books to their class of students. It also
+              allows students to create an account, view issued books and run a
+              report. Five AP Statistics books have been chosen for the teacher
+              to use. The teacher can edit the book when they want to and then
+              create multiple copies of that book. The teacher can then develop
+              student accounts, and assign book copies to the students.
+              Additionally, the teacher can look at a weekly report of all the
+              transactions that have occurred. This website provides a simple
+              and easy way for teachers to give books to students & students to
+              view their issued books.
             </p>
           </div>
           <div class="col-md-6 mt-4">
