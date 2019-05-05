@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
@@ -82,6 +83,15 @@ class Login extends Component {
                 />
                 <input type="submit" className="btn btn-info btn-block mt-4" />
                 <div />
+                <hr />
+                <center>
+                  <Link
+                    to="/NLCPreSubmission"
+                    className="btn btn-lg btn-info mr-2"
+                  >
+                    <center>Click Here - NLC Prejudging Homepage</center>
+                  </Link>
+                </center>
               </form>
             </div>
           </div>

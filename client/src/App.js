@@ -16,6 +16,7 @@ import Landing from "./components/layout/Landing";
 import AboutUs from "./components/aboutus/AboutUs";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import NLCPreSubmission from "./components/auth/NLCPreSubmission";
 import Dashboard from "./components/dashboard/Dashboard";
 import DashboardStudent from "./components/dashboardstudent/DashboardStudent";
 import CreateEbook from "./components/create-ebook/CreateEbook";
@@ -65,6 +66,11 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route
+                exact
+                path="/NLCPreSubmission"
+                component={NLCPreSubmission}
+              />
               <Route eaxct path="/aboutus" component={AboutUs} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />

@@ -39,6 +39,13 @@ class Landing extends Component {
                 <Link to="/login" className="btn btn-lg btn-light">
                   Login
                 </Link>
+                <hr />
+                <Link
+                  to="/NLCPreSubmission"
+                  className="btn btn-lg btn-info mr-2"
+                >
+                  Click Here - NLC Prejudging Homepage
+                </Link>
               </div>
             </div>
           </div>
