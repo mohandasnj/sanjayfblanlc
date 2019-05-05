@@ -58,18 +58,21 @@ class NLCPreSubmission extends Component {
                 <input
                   type="submit"
                   value="NLC Demo Auto Login For Prejudging"
-                  className="btn btn-primary"
+                  className="btn btn-info btn-block mt-4"
                 />
+                <br />
               </form>
             </div>
-            <p className="text-secondary">
-              Instructions to run the Program: Judges may click "NLC Demo Auto
-              Login For Prejudging" button above to access the website without
-              having to login to the teacher's account, instead the demo account
-              is ready to use. If you would like to sign or login to an account,
-              you may logout of the demo account, and register for a teacher or
-              student account and login manually.
-            </p>
+            <center>
+              <p className="text-secondary">
+                Instructions to run the Program: Judges may click "NLC Demo Auto
+                Login For Prejudging" button above to access the website without
+                having to login to the teacher's account, instead the demo
+                account is ready to use. If you would like to sign or login to
+                an account, you may logout of the demo account, and register for
+                a teacher or student account and login manually.
+              </p>
+            </center>
           </div>
         </div>
 
