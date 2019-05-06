@@ -147,7 +147,7 @@ class NLCPreSubmission extends Component {
                 <li class="list-group-item">
                   7. If you would like to know more about the purpose of the
                   application or contact the developer, click on the "About Us"
-                  like at the top.
+                  link at the top.
                 </li>
                 <li class="list-group-item">
                   8. Once you are done with the experience, you may log out.
