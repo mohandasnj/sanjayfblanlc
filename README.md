@@ -58,6 +58,7 @@ Install Git https://git-scm.com/
 
 Install Visual Studio Code: Extensions & settings
 https://code.visualstudio.com/docs/editor/integrated-terminal
+
 Extensions:
 ES7 React/Redux/GraphQL/React-Native snippets
 
