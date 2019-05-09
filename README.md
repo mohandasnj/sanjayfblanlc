@@ -2,8 +2,9 @@
 
 > This computer program is built to manage the issuance of e-books to a class of students.
 
-    Major functionalities includes
-    The AP Statistics Book Tracker allows teachers to create an account, track and issue books to their class of students.
+Major functionalities includes
+
+The AP Statistics Book Tracker allows teachers to create an account, track and issue books to their class of students.
 
 It also allows students to create an account, view issued books and run a report.
 Five AP Statistics books have been chosen for the teacher to use.
