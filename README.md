@@ -72,6 +72,7 @@ Source Control: https://github.com/
 Create free Website account in Heroku and code can be deployed to:
 https://signup.heroku.com/login
 
+```
 Additional Source of information:
 
 Bootstrap: https://www.w3schools.com/bootstrap/default.asp
@@ -85,6 +86,8 @@ Redux: https://redux.js.org/api/createstore
 Node.js: https://nodejs.org/en/
 
 Passport JWT: https://www.npmjs.com/package/passport-jwt
+
+```
 
 ```bash
 # Install dependencies for server
