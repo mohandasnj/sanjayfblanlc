@@ -2,6 +2,8 @@
 
 > This computer program is built to manage the issuance of e-books to a class of students.
 
+Application built & hosted in heroku : https://sanjayfblanlc.herokuapp.com/
+
 Major functionalities includes
 
 The AP Statistics Book Tracker allows teachers to create an account, track and issue books to their class of students.
